@@ -1,4 +1,11 @@
 class FlowLogEntry
+    PROTOCOLS = {
+        1 => 'ICMP',
+        6 => 'TCP',
+        17 => 'UDP'
+        # Add more protocols as needed
+    }
+
     ATTRIBUTES = [
         :version, :account_id, :interface_id, :srcaddr, :dstaddr,
         :srcport, :dstport, :protocol, :packets, :bytes, :start,
@@ -6,11 +13,17 @@ class FlowLogEntry
     ]
 
     attr_accessor(*ATTRIBUTES)
+    attr_accessor :tag
 
     def initialize(fields)
         ATTRIBUTES.each_with_index do |attr, index|
             value = fields[index]
-            value = value.to_i if [:srcport, :dstport, :protocol, :packets, :bytes, :start, :end].include?(attr)
+            if [:srcport, :dstport, :packets, :bytes, :start, :end].include?(attr)
+                value = value.to_i
+            elsif attr == :protocol
+                value = PROTOCOLS[value.to_i] || value
+                value.downcase!
+            end
             instance_variable_set("@#{attr}", value)
         end
     end
