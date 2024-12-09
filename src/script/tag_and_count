@@ -1,9 +1,9 @@
 #!/usr/bin/env ruby
 
 require_relative '../flow_log_entry'
-require_relative '../flow_log_format'
 require_relative '../logs_stats'
 require_relative '../tagger'
+require_relative '../log_reader'
 
 base_dir = File.dirname(__FILE__)
 data_directory = File.join(base_dir, 'data')
