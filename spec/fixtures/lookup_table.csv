@@ -1,0 +1,3 @@
+80,tcp,Web
+443,tcp,SecureWeb
+53,udp,DNS

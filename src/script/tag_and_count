@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+
+require_relative '../flow_log_entry'
+require_relative '../flow_log_format'
+require_relative '../logs_stats'
+require_relative '../tagger'
+
+base_dir = File.dirname(__FILE__)
+data_directory = File.join(base_dir, 'data')
+output_directory = File.join(base_dir, 'output')
+Dir.mkdir(output_directory) unless File.exist?(output_directory)
+
+# Initialize the log reader with the log file
+log_file = File.join(data_directory, 'log_file.log')
+log_reader = LogReader.new(log_file)
+
+# Initialize the tagger with the lookup table file
+lookup_table_file = File.join(data_directory, 'lookup_table.csv')
+tagger = Tagger.new(lookup_table_file)
+
+# Initialize the LogStats with the log reader and tagger
+log_stats = LogStats.new(log_reader, tagger)
+
+tag_stats_file = File.join(output_directory, 'tag_stats.csv')
+port_stats_file = File.join(output_directory, 'port_protocol_counts.csv')
+# Save the stats to CSV files
+puts "Saving stats to #{tag_stats_file} and #{port_stats_file}"
+log_stats.save_stats(tag_stats_file, port_stats_file)
